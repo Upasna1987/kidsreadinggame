@@ -1,4 +1,25 @@
 let currentWord = '';
+let playerName = '';
+
+function startGame() {
+    const nameInput = document.getElementById('childName');
+    playerName = nameInput.value.trim();
+    
+    if (!playerName) {
+        alert('Please enter your child\'s name to start the game!');
+        return;
+    }
+    
+    // Show game screen and hide welcome screen
+    document.getElementById('welcomeScreen').style.display = 'none';
+    document.getElementById('gameScreen').style.display = 'block';
+    
+    // Set player name in the game screen
+    document.getElementById('playerName').textContent = playerName;
+    
+    // Start fetching words
+    fetchWord();
+}
 
 // Function to fetch a random word from the server
 async function fetchWord() {
@@ -29,21 +50,24 @@ function triggerConfetti() {
 
 // Array of encouraging messages
 const encouragingMessages = [
-    "🌟 Amazing reading! 🌟",
-    "⭐ Great job! ⭐",
-    "🎉 Wonderful! 🎉",
-    "🌈 Fantastic reading! 🌈",
-    "🏆 Super star reader! 🏆",
-    "🎨 Brilliant! 🎨",
-    "🚀 Out of this world! 🚀",
-    "🌞 You're shining bright! 🌞",
-    "🎯 Perfect reading! 🎯",
-    "🎪 Spectacular! 🎪"
+    "🌟 Amazing reading, {name}! You're doing great! 🌟",
+    "⭐ Fantastic job, {name}! Keep shining! ⭐",
+    "🎉 Wonderful reading, {name}! You're getting better every day! 🎉",
+    "🌈 Brilliant work, {name}! You're becoming a super reader! 🌈",
+    "🏆 Super star reader, {name}! You make reading fun! 🏆",
+    "🎨 Beautiful reading, {name}! You're learning so fast! 🎨",
+    "🚀 Out of this world, {name}! You're unstoppable! 🚀",
+    "🌞 You're shining bright, {name}! Keep going! 🌞",
+    "🎯 Perfect reading, {name}! You're getting so good at this! 🎯",
+    "🎪 Spectacular job, {name}! You're becoming a reading champion! 🎪",
+    "📚 Excellent reading, {name}! You're making everyone proud! 📚",
+    "🌺 Lovely reading, {name}! Your skills are blooming! 🌺"
 ];
 
 // Function to get a random encouraging message
 function getRandomMessage() {
-    return encouragingMessages[Math.floor(Math.random() * encouragingMessages.length)];
+    const message = encouragingMessages[Math.floor(Math.random() * encouragingMessages.length)];
+    return message.replace('{name}', playerName);
 }
 
 // Function to handle parent confirmation
@@ -67,7 +91,11 @@ function handleSuccess() {
 }
 
 // Event listeners
-document.getElementById('goButton').addEventListener('click', handleSuccess);
+document.addEventListener('DOMContentLoaded', () => {
+    // The welcome screen is shown by default
+    // Game will start when the start button is clicked
+    document.getElementById('goButton').addEventListener('click', handleSuccess);
+});
 
 // Initialize the game
 fetchWord(); 

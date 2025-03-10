@@ -26,18 +26,49 @@
         .peppa-bg {
             background: linear-gradient(135deg, #ffecf8 0%, #f0f9ff 100%);
         }
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+        .game-screen {
+            display: none;
+        }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center peppa-bg">
-    <div class="text-center p-8 bg-white rounded-3xl shadow-xl max-w-md w-full mx-4">
+    <!-- Welcome Screen -->
+    <div id="welcomeScreen" class="welcome-screen text-center p-8 bg-white rounded-3xl shadow-xl max-w-md w-full mx-4">
+        <h1 class="text-4xl font-bold text-kid-blue">Welcome to Reading Game! 🌈</h1>
+        
+        <div class="space-y-4 w-full">
+            <p class="text-xl text-gray-600">Parents, please enter your child's name:</p>
+            <input type="text" 
+                   id="childName" 
+                   class="w-full px-4 py-2 text-xl border-2 border-pink-300 rounded-lg focus:border-pink-500 focus:outline-none"
+                   placeholder="Child's name">
+            <button onclick="startGame()" 
+                    class="w-full bg-pink-500 text-white text-xl py-3 rounded-lg hover:bg-pink-600 transition-colors">
+                Let's Read! 📚
+            </button>
+        </div>
+        
+        <p class="text-sm text-gray-500 mt-4">
+            Get ready for a fun reading adventure! 🌟
+        </p>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="gameScreen" class="game-screen text-center p-8 bg-white rounded-3xl shadow-xl max-w-md w-full mx-4">
         <div class="flex justify-between items-center mb-4">
             <div class="emoji float-animation">🌈</div>
-            <h1 class="text-4xl font-bold text-kid-blue">🎈 Word Game! 🎈</h1>
+            <h1 class="text-4xl font-bold text-kid-blue">🎈 Reading Game! 🎈</h1>
             <div class="emoji float-animation">🌈</div>
         </div>
         
         <div class="mb-4 text-gray-600 text-lg">
-            Parents: Click the rocket when your child reads the word correctly!
+            <span id="playerName"></span>, let's read this word:
         </div>
         
         <div class="mb-8 p-6 bg-blue-50 rounded-2xl shadow-inner">
