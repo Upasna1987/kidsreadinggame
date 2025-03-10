@@ -3,13 +3,16 @@ let currentWord = '';
 // Function to fetch a random word from the server
 async function fetchWord() {
     try {
-        const response = await fetch('http://localhost:3000/api/word');
+        // Use relative URL which will work both locally and in production
+        const response = await fetch('/api/word');
         const data = await response.json();
         currentWord = data.word;
         document.getElementById('wordDisplay').textContent = currentWord;
         document.getElementById('result').textContent = '';
     } catch (error) {
         console.error('Error fetching word:', error);
+        // Show error message to user
+        document.getElementById('wordDisplay').textContent = 'Loading...';
     }
 }
 
