@@ -23,16 +23,10 @@ app.use((req, res, next) => {
 });
 
 // Route to get a random word
-app.get('/api/word', async (req, res) => {
-    try {
-        console.log('Received request for random word');
-        const word = await getRandomWord();
-        console.log('Sending word:', word);
-        res.json({ word });
-    } catch (error) {
-        console.error('Error getting random word:', error);
-        res.status(500).json({ error: 'Server error' });
-    }
+app.get('/api/word', (req, res) => {
+    const word = getRandomWord();
+    console.log('Sending word:', word);
+    res.json({ word });
 });
 
 // Test route
