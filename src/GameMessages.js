@@ -1,0 +1,1 @@
+export const congratulatoryMessage = "SPECTACULAR READING! You're blazing through books like a literary champion! Your reading powers are extraordinary!"; 
