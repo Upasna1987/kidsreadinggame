@@ -1,7 +1,12 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
-const db = new sqlite3.Database(path.join(__dirname, 'words.sqlite'), (err) => {
+// Use in-memory database for production to handle Render's ephemeral filesystem
+const dbPath = process.env.NODE_ENV === 'production' 
+    ? ':memory:'
+    : path.join(__dirname, 'words.sqlite');
+
+const db = new sqlite3.Database(dbPath, (err) => {
     if (err) {
         console.error('Error opening database:', err);
     } else {
