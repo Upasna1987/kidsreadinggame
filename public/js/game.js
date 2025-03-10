@@ -1,6 +1,38 @@
 let currentWord = '';
 let playerName = '';
 
+// Initialize speech synthesis
+const speechSynthesis = window.speechSynthesis;
+let speaking = false;
+
+function speak(text) {
+    // Cancel any ongoing speech
+    speechSynthesis.cancel();
+
+    // Create a new speech utterance
+    const utterance = new SpeechSynthesisUtterance(text);
+    
+    // Set properties for a child-friendly voice
+    utterance.pitch = 1.2; // Slightly higher pitch
+    utterance.rate = 0.9;  // Slightly slower rate
+    utterance.volume = 1;  // Full volume
+    
+    // Try to find a friendly voice
+    const voices = speechSynthesis.getVoices();
+    const preferredVoice = voices.find(voice => 
+        voice.name.includes('Samantha') || // macOS
+        voice.name.includes('Female') ||   // Generic female voice
+        voice.name.includes('Google UK Female') // Chrome
+    );
+    
+    if (preferredVoice) {
+        utterance.voice = preferredVoice;
+    }
+
+    // Speak the message
+    speechSynthesis.speak(utterance);
+}
+
 function startGame() {
     const nameInput = document.getElementById('childName');
     playerName = nameInput.value.trim();
@@ -16,6 +48,9 @@ function startGame() {
     
     // Set player name in the game screen
     document.getElementById('playerName').textContent = playerName;
+    
+    // Welcome message
+    speak(`Welcome ${playerName}! Let's read together!`);
     
     // Start fetching words
     fetchWord();
@@ -72,9 +107,15 @@ function getRandomMessage() {
 
 // Function to handle parent confirmation
 function handleSuccess() {
+    // Get and display the message
+    const message = getRandomMessage();
     const resultDiv = document.getElementById('result');
-    resultDiv.textContent = getRandomMessage();
+    resultDiv.textContent = message;
     resultDiv.className = 'mt-6 text-2xl font-bold text-kid-green animate-bounce';
+    
+    // Speak the congratulatory message
+    speak(message);
+    
     triggerConfetti();
     
     // Disable the button temporarily
@@ -82,13 +123,18 @@ function handleSuccess() {
     goButton.disabled = true;
     goButton.classList.add('opacity-50');
     
-    // Get a new word after 5 seconds
+    // Get a new word after the message is spoken (approximately 5 seconds)
     setTimeout(() => {
         fetchWord();
         goButton.disabled = false;
         goButton.classList.remove('opacity-50');
-    }, 5000);  // Changed from 2000 to 5000 milliseconds
+    }, 5000);
 }
+
+// Initialize voices when they are loaded
+speechSynthesis.onvoiceschanged = () => {
+    console.log('Voices loaded:', speechSynthesis.getVoices().length);
+};
 
 // Event listeners
 document.addEventListener('DOMContentLoaded', () => {
