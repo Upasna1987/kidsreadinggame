@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const db = require('./db/database');
+const { getRandomWord } = require('./db/database');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -23,18 +23,16 @@ app.use((req, res, next) => {
 });
 
 // Route to get a random word
-app.get('/api/word', (req, res) => {
-    console.log('Received request for random word');
-    db.get('SELECT word FROM words ORDER BY RANDOM() LIMIT 1', (err, row) => {
-        if (err) {
-            console.error('Database error:', err);
-            res.status(500).json({ error: 'Database error' });
-        } else {
-            const word = row ? row.word : 'cat';
-            console.log('Sending word:', word);
-            res.json({ word });
-        }
-    });
+app.get('/api/word', async (req, res) => {
+    try {
+        console.log('Received request for random word');
+        const word = await getRandomWord();
+        console.log('Sending word:', word);
+        res.json({ word });
+    } catch (error) {
+        console.error('Error getting random word:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
 });
 
 // Test route
